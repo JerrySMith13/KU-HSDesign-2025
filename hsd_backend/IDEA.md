@@ -1,1 +1,0 @@
-okay so basically it's a backend written in rust that'll use ffmpeg to generate posters and serve them via an api. users can generate their posters and submit new stickers 
