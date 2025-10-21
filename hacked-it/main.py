@@ -1,13 +1,73 @@
-import PIL
-path = input("Enter file path: ")
-im = PIL.Image.open(path)
-
-im = applyFilters(im)
-
-
-
-im = applyText(im)
-
-input("Center text: ")
+from rich.prompt import Prompt, IntPrompt, Confirm
+import os
+from PIL import Image, ImageFont
+import text
+import sticker
 
 
+Vertical = ["top", "middle", "bottom"]
+Horizontal = ["left", "center", "right"]
+
+all_files = os.listdir(".")
+filtered = [name for name in all_files if name.endswith((".png", ".jpg"))]
+
+fileName = Prompt.ask("Pick an image for a background", choices=filtered)
+
+img = Image.open(fileName)
+
+
+#filter options here
+
+#Select stickers
+all_stickers = os.listdir("./stickers")
+all_stickers.append("")
+sticker_list = [
+    [None, None, None],
+    [None, None, None],
+    [None, None, None]   
+]
+for i in range(3):
+    if Confirm.ask(f"Would you like stickers in the {Vertical[i]} row?"):
+        for j in range(3):
+            selected = Prompt.ask(f"Select a sticker for the {Vertical[i]} {Horizontal[j]} section", choices=all_stickers, show_choices=True)
+            if selected == "":
+                selected = None
+            else: 
+                size = IntPrompt.ask("Size of sticker (%)", default=10)
+                sticker_list[i][j] = sticker.Sticker(selected, size)
+
+sticker_opts = sticker.StickerOptions(sticker_list)
+sticker_opts.renderStickers(img=img)
+            
+            
+#Text options
+topTextObj: text.TextObj | None
+bottomTextObj: text.TextObj | None
+centerTextObj: text.TextObj | None
+
+topText = Prompt.ask("Top Text (enter for no text)")
+if topText.strip() != "":
+    textSize = IntPrompt.ask("Enter font size", default=40)
+    font = Prompt.ask("Enter font: ", choices=os.listdir("./fonts"))
+    topTextObj = text.TextObj(topText, fontSize=textSize, font=font)
+else: topTextObj = None
+    
+centerText = Prompt.ask("Center Text (enter for no text)")
+if centerText.strip() != "":
+    textSize = IntPrompt.ask("Enter font size", default=40)
+    font = Prompt.ask("Enter font", choices=os.listdir("./fonts"))
+    centerTextObj = text.TextObj(centerText, fontSize=textSize, font=font)
+else: centerTextObj = None
+    
+bottomText = Prompt.ask("Bottom Text (enter for no text)")
+if bottomText.strip() != "":
+    textSize = IntPrompt.ask("Enter font size", default=40)
+    font = Prompt.ask("Enter font", choices=os.listdir("./fonts"))
+    bottomTextObj = text.TextObj(bottomText, fontSize=textSize, font=font)
+else: bottomTextObj = None
+    
+options = text.TextOptions(topText=topTextObj, bottomText=bottomTextObj, centerText=centerTextObj)
+options.renderText(img=img)
+
+saveDest = Prompt.ask("Filename to save to")
+img.save(f"{saveDest}.png")

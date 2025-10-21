@@ -32,7 +32,7 @@ class StickerOptions:
                 x_coord = int((x_pos + 0.5) * cell_w)
                 y_coord = int((y_pos + 0.5) * cell_h)
                 
-                sticker_pil = Image.open(f"./stickers/{sticker.name}.png")
+                sticker_pil = Image.open(f"./stickers/{sticker.name}")
                 sticker_width, sticker_height = sticker_pil.size
                 watermark_width = int(sticker_width * (sticker.size / 100))
                 watermark_height = int(sticker_height * (sticker.size / 100))

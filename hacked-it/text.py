@@ -31,15 +31,15 @@ class TextOptions:
         
         #render top text
         if self.topText != None:
-            font = ImageFont.truetype(f"./fonts/{self.topText.font}.ttf")
+            font = ImageFont.truetype(f"./fonts/{self.topText.font}")
             
             drawer.text((width //2, 20), self.topText.text, anchor="mm", font=font)
         if self.bottomText != None:
-            font = ImageFont.truetype(f"./fonts/{self.bottomText.font}.ttf")
+            font = ImageFont.truetype(f"./fonts/{self.bottomText.font}")
             drawer.text((width //2, height - 20), self.bottomText.text, anchor="mm", font=font)
         
         if self.centerText != None:
-            font = ImageFont.truetype(f"./fonts/{self.centerText.font}.ttf")
+            font = ImageFont.truetype(f"./fonts/{self.centerText.font}")
             drawer.text((width //2, height //2), self.bottomText.text, anchor="mm", font=font)
             
         
@@ -54,7 +54,3 @@ if __name__ == "__main__":
     
     img.save("helloimg.jpg")
     
-        
-    """
-        Is there
-    """
