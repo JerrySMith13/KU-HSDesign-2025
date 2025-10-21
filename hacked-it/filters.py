@@ -20,7 +20,7 @@ class filter_image:
         self.image = ImageOps.colorize(grayed, "#704214", "#C0A080")
         return self
 
-    def colorify(self, color, intensity: float = 0.3):
+    def colorify(self, color, intensity: float = None):
         """Tints image with a color at given intensity."""
         overlay = Image.new("RGB", self.image.size, ImageColor.getrgb(color))
         self.image = Image.blend(self.image, overlay, intensity)
@@ -35,3 +35,4 @@ class filter_image:
         """Saves the filtered image."""
         self.image.save(save_path or self.save_path)
         return self
+
