@@ -1,9 +1,8 @@
-from rich.prompt import Prompt, IntPrompt, Confirm
+from rich.prompt import Prompt, IntPrompt, Confirm, FloatPrompt
 import os
 from PIL import Image, ImageFont
 import text
 import sticker
-import border
 import filters
 
 Vertical = ["top", "middle", "bottom"]
@@ -13,6 +12,12 @@ all_files = os.listdir(".")
 filtered = [name for name in all_files if name.endswith((".png", ".jpg"))]
 
 fileName = Prompt.ask("Pick an image for a background", choices=filtered)
+
+
+
+#crop for face here
+
+
 
 img = Image.open(fileName)
 
@@ -24,11 +29,14 @@ match selection:
     case "":
         pass
     case "b&w":
-        
+        filters.filter_image.grayscale(img)        
     case "sepia":
-        pass
+        filters.filter_image.sepia(img)
     case "colorify":
-        pass
+        color = Prompt.ask("Enter color: ")
+        intens = FloatPrompt.ask("Enter color intensity")
+        filters.filter_image.colorify(img, color, intens)
+        
 
 #Select stickers
 all_stickers = os.listdir("./stickers")
@@ -80,15 +88,6 @@ else: bottomTextObj = None
     
 options = text.TextOptions(topText=topTextObj, bottomText=bottomTextObj, centerText=centerTextObj)
 options.renderText(img=img)
-
-# Generate border
-borderOptions = os.listdir("./borders")
-borderOptions.append("")
-borderPath = Prompt.ask("Select a border (enter for no border)", choices=borderOptions)
-if borderPath != "":
-    borderInset = IntPrompt.ask("Border inset")
-    border.add_border(img=img, name=borderPath)
-    
 
 saveDest = Prompt.ask("Filename to save to")
 img.save(f"{saveDest}.png")
