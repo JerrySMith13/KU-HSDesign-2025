@@ -1,6 +1,6 @@
 from rich.prompt import Prompt, IntPrompt, Confirm, FloatPrompt
 import os
-from PIL import Image, ImageFont
+from PIL import Image, ImageFont, ImageOps
 import text
 import sticker
 import filters
@@ -20,7 +20,7 @@ fileName = Prompt.ask("Pick an image for a background", choices=filtered)
 
 
 img = Image.open(fileName)
-
+img = img.resize((150, 200))
 #filter options here
 all_filters = ["b&w", "sepia", "colorify", ""]
 selection = Prompt.ask("Select a filter (enter for none)")
