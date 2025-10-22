@@ -3,7 +3,8 @@ import os
 from PIL import Image, ImageFont
 import text
 import sticker
-
+import border
+import filters
 
 Vertical = ["top", "middle", "bottom"]
 Horizontal = ["left", "center", "right"]
@@ -15,8 +16,19 @@ fileName = Prompt.ask("Pick an image for a background", choices=filtered)
 
 img = Image.open(fileName)
 
-
 #filter options here
+all_filters = ["b&w", "sepia", "colorify", ""]
+selection = Prompt.ask("Select a filter (enter for none)")
+
+match selection:
+    case "":
+        pass
+    case "b&w":
+        
+    case "sepia":
+        pass
+    case "colorify":
+        pass
 
 #Select stickers
 all_stickers = os.listdir("./stickers")
@@ -68,6 +80,15 @@ else: bottomTextObj = None
     
 options = text.TextOptions(topText=topTextObj, bottomText=bottomTextObj, centerText=centerTextObj)
 options.renderText(img=img)
+
+# Generate border
+borderOptions = os.listdir("./borders")
+borderOptions.append("")
+borderPath = Prompt.ask("Select a border (enter for no border)", choices=borderOptions)
+if borderPath != "":
+    borderInset = IntPrompt.ask("Border inset")
+    border.add_border(img=img, name=borderPath)
+    
 
 saveDest = Prompt.ask("Filename to save to")
 img.save(f"{saveDest}.png")
