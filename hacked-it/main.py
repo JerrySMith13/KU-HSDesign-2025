@@ -4,6 +4,7 @@ from PIL import Image, ImageFont
 import text
 import sticker
 import filters
+import face_crop
 
 Vertical = ["top", "middle", "bottom"]
 Horizontal = ["left", "center", "right"]
@@ -14,16 +15,18 @@ filtered = [name for name in all_files if name.endswith((".png", ".jpg"))]
 fileName = Prompt.ask("Pick an image for a background", choices=filtered)
 
 
-
+img: Image
 #crop for face here
+if Confirm.ask("Would you like to crop the image for the face?"):
+    img = face_crop.crop_face("./" + fileName)
+
+else: img = Image.open(fileName)
 
 
-
-img = Image.open(fileName)
 
 #filter options here
 all_filters = ["b&w", "sepia", "colorify", ""]
-selection = Prompt.ask("Select a filter (enter for none)")
+selection = Prompt.ask("Select a filter (enter for none)", choices=all_filters)
 
 match selection:
     case "":
