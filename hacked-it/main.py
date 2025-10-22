@@ -5,6 +5,7 @@ import text
 import sticker
 import filters
 import face_crop
+import upscaling
 
 Vertical = ["top", "middle", "bottom"]
 Horizontal = ["left", "center", "right"]
@@ -22,9 +23,6 @@ if Confirm.ask("Would you like to crop the image for the face?"):
 
 else: img = Image.open(fileName)
 
-
-
-img = Image.open(fileName)
 img = img.resize((150, 200))
 #filter options here
 all_filters = ["b&w", "sepia", "colorify", ""]
@@ -94,5 +92,12 @@ else: bottomTextObj = None
 options = text.TextOptions(topText=topTextObj, bottomText=bottomTextObj, centerText=centerTextObj)
 options.renderText(img=img)
 
-saveDest = Prompt.ask("Filename to save to")
-img.save(f"{saveDest}.png")
+# upscaling
+if not Confirm.ask("Would you like to upscale the image? (this may take a while)"):
+    saveDest = Prompt.ask("Filename to save to")
+    img.save(f"{saveDest}.png")
+else:
+    saveName = Prompt.ask("Filename to save to")
+    upscaling.upscale_and_save(img, saveName)
+
+
