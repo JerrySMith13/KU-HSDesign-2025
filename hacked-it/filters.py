@@ -10,9 +10,14 @@ class filter_image:
     def sepia(img: Image):
         """Applies sepia tone to image."""
         grayed = img.convert("L")
-        img = ImageOps.colorize(grayed, "#704214", "#C0A080")
+        img.paste(ImageOps.colorize(grayed, "#704214", "#C0A080"))
 
-    def colorify(img:Image, color, intensity: float = 0):
+    def colorify(img:Image, color, intensity: float = None):
         """Tints image with a color at given intensity."""
         overlay = Image.new("RGB", img.size, ImageColor.getrgb(color))
-        img = Image.blend(img, overlay, intensity)
+        img.paste(Image.blend(img, overlay, intensity))
+
+if __name__ == "__main__":
+    img = Image.open("./helloimg.jpg")
+    filter_image.sepia(img)
+    img.save("sepia.jpg")
